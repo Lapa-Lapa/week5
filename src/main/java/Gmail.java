@@ -14,6 +14,9 @@ public class Gmail {
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+        //          *       *       *       *       *
+        System.out.println("Singning in and Gmail open");
+        //          *       *       *       *       *
         driver.get("https://accounts.google.com/signin");
         driver.findElement(By.id("identifierId")).sendKeys("daryatarelkoatm2017@gmail.com");
         driver.findElement(By.cssSelector("span.RveJvd.snByac")).click();
@@ -22,28 +25,38 @@ public class Gmail {
         driver.findElement(By.cssSelector("span.RveJvd.snByac")).click();
         driver.findElement(By.xpath("//*[@id=\"gbwa\"]/div[1]/a")).click();//9 квадратиков
         driver.findElement(By.xpath("//*[@id=\"gb23\"]/span[1]")).click();//Выбор Gmaila
-        //driver.get("https://mail.google.com/mail/?ui=html&zy=h");
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[1]/table[1]/tbody/tr[1]/td/b/a")).click();//нажать Compose
-        String a0 = "test" + System.nanoTime() + "@gmail.com";
-        driver.findElement(By.xpath(".//*[@id='to']")).sendKeys(a0);
-        String a1 = "smth";
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[8]/td[2]/textarea")).sendKeys(a1);
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[4]/td[2]/input")).click();
-        String a2 = "HW week 5";
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[4]/td[2]/input")).sendKeys(a2);
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[3]/tbody/tr/td/input[2]")).click();
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[1]/table[1]/tbody/tr[6]/td/h3/b/a")).click();
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[1]/td[3]/a/span")).click();
-        String to = driver.findElement(By.xpath(".//*[@id='to']")).getText();
-        Assert.assertEquals(to, a0);
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[3]/tbody/tr/td[1]/input[1]")).click();//Send
-        driver.findElement(By.xpath("html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[1]/td[3]/a/span")).click();
-        String to2 = driver.findElement(By.xpath("/html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/table[4]/tbody/tr/td/table[3]/tbody/tr[4]/td/div/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[2]/td/a/b")).getText();
-        Assert.assertNotEquals(to2, a0);
-        driver.findElement(By.xpath("/html/body/table[2]/tbody/tr/td[1]/table[1]/tbody/tr[5]/td/a")).click();//Sent folder
-        driver.findElement(By.xpath("//html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/form/table[2]/tbody/tr[1]/td[3]/a/span/b")).click();
-        String send1to = driver.findElement(By.xpath("/html/body/table[2]/tbody/tr/td[2]/table[1]/tbody/tr/td[2]/table[5]/tbody/tr/td/table[1]/tbody/tr[4]/td/div/div/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[2]/td/a/b")).getText();
-        Assert.assertEquals(send1to, a0);
+        //          *       *       *       *       *
+        System.out.println("New message creating with filling recipient, subject and text of mail");
+        //          *       *       *       *       *
+        String recipient = "test" + System.nanoTime() + "@gmail.com";
+        String subject = "HW week 5";
+        String textOfMail = "smth";
+        driver.findElement(By.xpath("//a[contains(text(),'Compose')]")).click();
+        driver.findElement(By.xpath(".//*[@id='to']")).sendKeys(recipient);
+        driver.findElement(By.name("subject")).sendKeys(subject);
+        driver.findElement(By.name("body")).sendKeys(textOfMail);
+        //          *       *       *       *       *
+        System.out.println("Save as draft and check in folder if it is created mail");
+        //          *       *       *       *       *
+        driver.findElement(By.xpath("//input[@value='Save Draft']")).click();
+        driver.findElement(By.xpath("//a[contains(text(),'Drafts')]")).click();
+        driver.findElement(By.xpath("//td[3]/a/span")).click();//first draft
+        String draftRecipient = driver.findElement(By.xpath(".//*[@id='to']")).getText();
+        Assert.assertEquals(draftRecipient, recipient);
+        //          *       *       *       *       *
+        System.out.println("Send from draft folder and check new first draft to be not equals (garantee that we send mail)");
+        //          *       *       *       *       *
+        driver.findElement(By.xpath("//input[@value='Send']")).click();
+        driver.findElement(By.xpath("//td[3]/a/span")).click();//first draft
+        String newFirstDraftRecipient = driver.findElement(By.xpath("//tr[2]/td/a/b")).getText();
+        Assert.assertNotEquals(newFirstDraftRecipient, recipient);
+        //          *       *       *       *       *
+        System.out.println("Final check in send folder by uniqe generated recipient");
+        //          *       *       *       *       *
+        driver.findElement(By.xpath("//tr[5]/td/a")).click();//Sent folder
+        driver.findElement(By.xpath("//td[3]/a/span/b")).click();
+        String sendRecipient = driver.findElement(By.xpath("//tr[2]/td/a/b")).getText();
+        Assert.assertEquals(sendRecipient, recipient);
         driver.close();
     }
 }
