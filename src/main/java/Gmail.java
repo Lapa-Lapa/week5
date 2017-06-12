@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class SeleniumDemo {
+public class Gmail {
     @Test
     public void testMethod1() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
@@ -44,15 +44,14 @@ public class SeleniumDemo {
         driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
         driver.get("https://mail.google.com/mail/#drafts");
         Thread.sleep(15000);
-        String draft1 = driver.findElement(By.xpath("/.//*[@class='zA yO'][1]")).getText();
-        System.out.println(draft1);
+        String draft1 = driver.findElement(By.xpath("/.//*[@class='AO']")).getText();
         String a1 = draft1.substring(0, 22);
         Assert.assertEquals(a1, "Draft\n" +
                 "HW week 5 - smth", "Expected to be equal");
-        driver.findElement(By.xpath("//*[@id=\":5x\"]")).click();//letter link
+        driver.findElement(By.xpath("/.//*[@class='AO']")).click();//letter link
         driver.findElement(By.xpath("//*[@id=\":n0\"]")).click();//Send
         Thread.sleep(15000);
-        String draft2 = driver.findElement(By.xpath("/.//*[@class='zA yO'][1]")).getText();//new first draft
+        String draft2 = driver.findElement(By.xpath(".//*[@id=':o2']/div")).getText();//new first draft
         Assert.assertNotEquals(draft1, draft2, "Expected to be NOT equal");
         String send1 = driver.findElement(By.xpath("/.//*[@id=':4']")).getText();//find in Sent folder
         Assert.assertNotEquals(draft1, send1, "Expected to be equal");
