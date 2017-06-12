@@ -1,79 +1,61 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
 public class SeleniumDemo {
-
-    String LOGIN = "daryatarelkoatm2017";
-    String PASSWORD = "123dartar";
-
-
-    @FindBy(css = "input#identifierId.whsOnd.zHQkBf")
-    private WebElement loginField;
-
-    @FindBy(css = "span.RveJvd.snByac")
-    private WebElement submitButtonForLogin;
-
-    @FindBy(xpath = "id('password')/x:div[1]/x:div/x:div[1]/x:input")
-    private WebElement passwordField;
-
-    @FindBy(css = "span.RveJvd.snByac")
-    private WebElement submitButtonForPassword;
-
-    public static void main(String[] args) {
-
+    @Test
+    public void testMethod1() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.get("https://accounts.google.com/signin");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.findElement(By.id("identifierId")).sendKeys("daryatarelkoatm2017@gmail.com");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.findElement(By.cssSelector("span.RveJvd.snByac")).click();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//*[@id=\"password\"]/div[1]/div/div[1]/input")).sendKeys("123dartar");
+        Thread.sleep(3000);
+        driver.findElement(By.cssSelector("span.RveJvd.snByac")).click();
+        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//*[@id=\"gbwa\"]/div[1]/a")).click();//9 квадратиков
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//*[@id=\"gb23\"]/span[1]")).click();//Выбор Gmaila
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//*[@id=\":45\"]/div/div[2]/span/a")).click();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.findElement(By.cssSelector("#\\3a 3t > div > div")).click();//нажать Compose
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+        driver.findElement(By.name("to")).sendKeys("test" + System.nanoTime() + "@gmail.com");
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+        driver.findElement(By.xpath(".//*[@class='Ar Au']/div")).sendKeys("smth");
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+        driver.findElement(By.name("subjectbox")).click();
+        driver.findElement(By.name("subjectbox")).sendKeys("HW week 5");
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+        Thread.sleep(10000);
+        driver.findElement(By.xpath(".//*[@alt='Close']")).click();//
+        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+        driver.get("https://mail.google.com/mail/#drafts");
+        Thread.sleep(15000);
+        String draft1 = driver.findElement(By.xpath("/.//*[@class='zA yO'][1]")).getText();
+        System.out.println(draft1);
+        String a1 = draft1.substring(0, 22);
+        Assert.assertEquals(a1, "Draft\n" +
+                "HW week 5 - smth", "Expected to be equal");
+        driver.findElement(By.xpath("//*[@id=\":5x\"]")).click();//letter link
+        driver.findElement(By.xpath("//*[@id=\":n0\"]")).click();//Send
+        Thread.sleep(15000);
+        String draft2 = driver.findElement(By.xpath("/.//*[@class='zA yO'][1]")).getText();//new first draft
+        Assert.assertNotEquals(draft1, draft2, "Expected to be NOT equal");
+        String send1 = driver.findElement(By.xpath("/.//*[@id=':4']")).getText();//find in Sent folder
+        Assert.assertNotEquals(draft1, send1, "Expected to be equal");
+        driver.close();
     }
-
-        public void authorization (String LOGIN, String PASSWORD){
-            //loginField.click();
-            //loginField.clear();
-            loginField.sendKeys(LOGIN);
-            submitButtonForLogin.click();
-            passwordField.click();
-            passwordField.clear();
-            passwordField.sendKeys(PASSWORD);
-            passwordField.click();
-        }
-    }
-
-
-
-//        driver.findElement(By.cssSelector("#twotabsearchtextbox")).sendKeys("Iphone SE");
-//        driver.findElement(By.xpath("//input[@value='Go']")).click();
-//        driver.findElement(By.cssSelector("#result_0 a.s-access-detail-page")).click();
-//        String price = driver.findElement(By.cssSelector("#priceblock_ourprice")).getText();
-//        driver.close();
-//        System.out.println("iPhone SE price is " + price);
-
-
-/**
- * import java.util.regex.Pattern;  import java.util.concurrent.TimeUnit;
- * import org.testng.annotations.*;   import static org.testng.Assert.*;
- * import org.openqa.selenium.*;      import org.openqa.selenium.firefox.FirefoxDriver;
- * import org.openqa.selenium.support.ui.Select;
- * private boolean acceptNextAlert = true;
- * private StringBuffer verificationErrors = new StringBuffer();
- * public void setUp() throws Exception {
- * baseUrl = "";
- * driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); }
- *
- * @Test public void testNewHW() throws Exception {
- * // ERROR: Caught exception [ERROR: Unsupported command [selectWindow | null | ]]
- * @AfterClass(alwaysRun = true) public void tearDown() throws Exception { driver.quit();
- * String verificationErrorString = verificationErrors.toString();
- * if (!"".equals(verificationErrorString)) { fail(verificationErrorString); } }
- * private boolean isElementPresent(By by) { try { driver.findElement(by); return true; }
- * catch (NoSuchElementException e) { return false; } }
- * private boolean isAlertPresent() { try { driver.switchTo().alert(); return true; }
- * catch (NoAlertPresentException e) { return false; } }
- * private String closeAlertAndGetItsText() { try { Alert alert = driver.switchTo().alert(); String alertText = alert.getText(); if (acceptNextAlert) { alert.accept(); } else { alert.dismiss(); } return alertText; } finally { acceptNextAlert = true; } } }
- */
+}
